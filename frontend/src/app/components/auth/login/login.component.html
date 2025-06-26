@@ -1,0 +1,38 @@
+<div class="login-container">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="text-center">Login</h2>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" formControlName="email" class="form-control" 
+                 [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+            <div *ngIf="f.email.errors.required">Email é obrigatório</div>
+            <div *ngIf="f.email.errors.email">Email inválido</div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Senha</label>
+          <input type="password" id="password" formControlName="password" class="form-control" 
+                 [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors.required">Senha é obrigatória</div>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+          Entrar
+        </button>
+      </form>
+      
+      <div class="text-center mt-3">
+        <a routerLink="/register">Criar nova conta</a>
+      </div>
+    </div>
+  </div>
+</div>

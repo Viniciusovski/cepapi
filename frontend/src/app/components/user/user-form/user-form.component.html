@@ -1,0 +1,70 @@
+<div class="user-form-container">
+  <h2>{{ isEditMode ? 'Editar Usuário' : 'Novo Usuário' }}</h2>
+  
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Nome Completo</label>
+      <input type="text" id="name" formControlName="name" class="form-control" 
+             placeholder="Digite o nome completo"
+             [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
+      <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+        <div *ngIf="f.name.errors.required">Nome é obrigatório</div>
+        <div *ngIf="f.name.errors.minlength">Nome deve ter pelo menos 3 caracteres</div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" formControlName="email" class="form-control" 
+             placeholder="Digite o email"
+             [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+             [readonly]="isEditMode">
+      <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+        <div *ngIf="f.email.errors.required">Email é obrigatório</div>
+        <div *ngIf="f.email.errors.email">Email inválido</div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="password">Senha</label>
+      <input type="password" id="password" formControlName="password" class="form-control" 
+             placeholder="Digite uma senha"
+             [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+      <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+        <div *ngIf="f.password.errors.required">Senha é obrigatória</div>
+        <div *ngIf="f.password.errors.minlength">Senha deve ter pelo menos 6 caracteres</div>
+      </div>
+      <small class="form-text text-muted" *ngIf="isEditMode">
+        Deixe em branco para manter a senha atual
+      </small>
+    </div>
+    
+    <div class="form-group">
+      <label for="role">Tipo de Usuário</label>
+      <select id="role" formControlName="role" class="form-control" 
+              [ngClass]="{ 'is-invalid': submitted && f.role.errors }">
+        <option value="ROLE_USER">Usuário</option>
+        <option value="ROLE_ADMIN">Administrador</option>
+      </select>
+      <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
+        <div *ngIf="f.role.errors.required">Tipo de usuário é obrigatório</div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+        {{ isEditMode ? 'Atualizar' : 'Salvar' }}
+      </button>
+      <button type="button" class="btn btn-outline-secondary ml-2" (click)="cancel()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+  
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Carregando...</span>
+    </div>
+  </div>
+</div>

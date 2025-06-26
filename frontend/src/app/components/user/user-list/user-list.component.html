@@ -1,0 +1,77 @@
+<div class="user-list-container">
+  <div class="header">
+    <h2>Usuários</h2>
+    <button class="btn btn-primary" (click)="createUser()">
+      <i class="fas fa-plus"></i> Novo Usuário
+    </button>
+  </div>
+  
+  <div class="filters">
+    <input type="text" placeholder="Pesquisar..." [(ngModel)]="searchTerm" 
+           (input)="applyFilter()">
+  </div>
+  
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th (click)="sort('name')">Nome 
+            <i class="fas" [ngClass]="{
+              'fa-sort': currentSort !== 'name',
+              'fa-sort-up': currentSort === 'name' && sortDirection === 'asc',
+              'fa-sort-down': currentSort === 'name' && sortDirection === 'desc'
+            }"></i>
+          </th>
+          <th (click)="sort('email')">Email 
+            <i class="fas" [ngClass]="{
+              'fa-sort': currentSort !== 'email',
+              'fa-sort-up': currentSort === 'email' && sortDirection === 'asc',
+              'fa-sort-down': currentSort === 'email' && sortDirection === 'desc'
+            }"></i>
+          </th>
+          <th>Tipo</th>
+          <th>Data Criação</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers">
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'badge-primary': user.role === 'ROLE_ADMIN',
+              'badge-secondary': user.role === 'ROLE_USER'
+            }">
+              {{ user.role === 'ROLE_ADMIN' ? 'Administrador' : 'Usuário' }}
+            </span>
+          </td>
+          <td>{{ user.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td class="actions">
+            <button class="btn btn-sm btn-info" (click)="editUser(user.id)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)" 
+                    *ngIf="authService.isAdmin()">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="pagination">
+    <button class="btn btn-outline-primary" [disabled]="currentPage === 0" 
+            (click)="previousPage()">Anterior</button>
+    <span>Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+    <button class="btn btn-outline-primary" [disabled]="currentPage === totalPages - 1" 
+            (click)="nextPage()">Próxima</button>
+  </div>
+  
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Carregando...</span>
+    </div>
+  </div>
+</div>
